@@ -1,0 +1,28 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+name = "currency-converter"
+client_id = "6738b4681ef9edaa1fb30e3e6ce8676e"
+application_url = "https://inappropriate-polish-wells-seniors.trycloudflare.com"
+embedded = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products,write_content"
+
+[auth]
+redirect_urls = [
+  "https://inappropriate-polish-wells-seniors.trycloudflare.com/auth/callback",
+  "https://inappropriate-polish-wells-seniors.trycloudflare.com/auth/shopify/callback",
+  "https://inappropriate-polish-wells-seniors.trycloudflare.com/api/auth/callback",
+  "https://inappropriate-polish-wells-seniors.trycloudflare.com/.shopify/graphiql/auth/callback"
+]
+
+[webhooks]
+api_version = "2023-10"
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "regadev.myshopify.com"

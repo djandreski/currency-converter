@@ -1,0 +1,12 @@
+{% render 'currencies_dropdown', width: block.settings.width, margin_left: block.settings.margin_left, margin_right: block.settings.margin_right %}
+{% schema %}
+{
+  "name": "Currencies",
+  "target": "section",
+  "settings": [
+    {"type": "range", "id": "width", "label": "Width", "min": 50, "max": 300, "step": 5, "unit": "px", "default": 100},
+    {"type": "range", "id": "margin_left", "label": "Left Margin", "min": 0, "max": 50, "step": 1, "unit": "px", "default": 10},
+    {"type": "range", "id": "margin_right", "label": "Right Margin", "min": 0, "max": 50, "step": 1, "unit": "px", "default": 0}
+  ]
+}
+{% endschema %}

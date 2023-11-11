@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id          String    @id
+  shop        String
+  state       String
+  isOnline    Boolean   @default(false)
+  scope       String?
+  expires     DateTime?
+  accessToken String
+  userId      BigInt?
+}
+
+model Latest {
+  id          Int       @id @default(autoincrement())
+  base        String
+  currencies  Currency[]
+}
+
+model Currency {
+  id          Int       @id @default(autoincrement())
+  symbol      String
+  rate        Decimal
+  latestId    Int
+  latest      Latest    @relation(fields: [latestId], references: [id])
+}
