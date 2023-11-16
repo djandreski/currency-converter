@@ -2,7 +2,7 @@
 
 name = "currency-converter"
 client_id = "6738b4681ef9edaa1fb30e3e6ce8676e"
-application_url = "https://identifier-extent-proceeding-reflected.trycloudflare.com"
+application_url = "https://fish-sc-associate-hydrogen.trycloudflare.com"
 embedded = true
 
 [access_scopes]
@@ -11,10 +11,10 @@ scopes = "write_products,write_content"
 
 [auth]
 redirect_urls = [
-  "https://identifier-extent-proceeding-reflected.trycloudflare.com/auth/callback",
-  "https://identifier-extent-proceeding-reflected.trycloudflare.com/auth/shopify/callback",
-  "https://identifier-extent-proceeding-reflected.trycloudflare.com/api/auth/callback",
-  "https://identifier-extent-proceeding-reflected.trycloudflare.com/.shopify/graphiql/auth/callback"
+  "https://fish-sc-associate-hydrogen.trycloudflare.com/auth/callback",
+  "https://fish-sc-associate-hydrogen.trycloudflare.com/auth/shopify/callback",
+  "https://fish-sc-associate-hydrogen.trycloudflare.com/api/auth/callback",
+  "https://fish-sc-associate-hydrogen.trycloudflare.com/.shopify/graphiql/auth/callback"
 ]
 
 [webhooks]

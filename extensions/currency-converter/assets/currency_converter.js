@@ -1,71 +1,3 @@
-const header = document.querySelector("header");
-const lastElement = header.lastElementChild;
-const currenciesDropdown = document.querySelector(".currencyList");
-lastElement.append(currenciesDropdown);
-
-// Converting logic
-(() => {
-    const baseCurrencyRate = ccRates.currencies.find((c) => c.symbol == ccBaseCurrency);
-
-    const isElement = (element) => {
-        return element instanceof Element || element instanceof Document;  
-    }
-
-    const updatePrices = (selectedCurrency) => {
-        const selectedCurrencyRate = ccRates.currencies.find((c) => c.symbol == selectedCurrency);
-        const moneyEls = document.querySelectorAll(".money");
-        for (const index in moneyEls) {
-            const moneyEl = moneyEls[index];
-            if(!isElement(moneyEl)) continue;
-
-            // Get the money element
-            const priceVal = moneyEl.textContent.match(/\d+\.?\d+/g)[0];
-            const price = parseFloat(priceVal);
-
-            let priceInBaseConvert = 0;
-            // If the base currency price is set in a data- attribute use it
-            if(moneyEl.dataset.base_price){
-                priceInBaseConvert = moneyEl.dataset.base_price;
-            } else { // if not calculate the price in a base rate and set it in a data- attribute
-                priceInBaseConvert = price / baseCurrencyRate.rate;
-                moneyEl.dataset.base_price = priceInBaseConvert;
-            }
-
-            const priceInSelCurrency = priceInBaseConvert * selectedCurrencyRate.rate;
-            
-            // Format the price in the selected locale and display it
-            const currencyDetails = currenciesFlags.find((cf) => cf.code === selectedCurrencyRate.symbol);
-            const selCurLocale = `${currencyDetails.countryCode.toLowerCase()}-${currencyDetails.countryCode}`;
-            const convertedPriceVal = new Intl.NumberFormat(selCurLocale, { style: 'currency', currency: selectedCurrencyRate.symbol }).format(priceInSelCurrency);
-            
-            moneyEl.textContent = convertedPriceVal;
-        }
-    }
-    
-    // Handle the selection of an option
-    document.body.addEventListener( 'click', function ( event ) {
-        const option = event.target.closest(".option");
-        if(option) {
-            const optionMenu = document.querySelector(".select-menu"),
-                  sBtn_text = optionMenu.querySelector(".sBtn-text");
-            
-            const selectedCurrency = option.dataset.symbol;
-            const flagEl = option.querySelector(".currency-flag");
-            sBtn_text.innerText = selectedCurrency;
-            const buttonFlag = sBtn_text.parentElement.querySelector(".currency-flag");
-            if(buttonFlag){
-                sBtn_text.parentElement.removeChild(buttonFlag);
-            }
-
-            // Prepend the html content because it removes the element like this
-            sBtn_text.parentElement.prepend(flagEl);
-            optionMenu.classList.remove("active");
-            
-            updatePrices(selectedCurrency);
-        };
-    });
-})();
-
 const currenciesFlags = [
     {
         "code": "AED",
@@ -1166,6 +1098,92 @@ const currenciesFlags = [
     }
 ];
 
+const header = document.querySelector("header");
+const lastElement = header.lastElementChild;
+const currenciesDropdown = document.querySelector(".currencyList");
+lastElement.append(currenciesDropdown);
+
+// Converting logic
+(() => {
+    const baseCurrencyRate = ccRates.currencies.find((c) => c.symbol == ccBaseCurrency);
+
+    const isElement = (element) => {
+        return element instanceof Element || element instanceof Document;  
+    }
+
+    const updatePrices = (selectedCurrency) => {
+        const selectedCurrencyRate = ccRates.currencies.find((c) => c.symbol == selectedCurrency);
+        const moneyEls = document.querySelectorAll(".money");
+        for (const index in moneyEls) {
+            const moneyEl = moneyEls[index];
+            if(!isElement(moneyEl)) continue;
+
+            // Get the money element
+            const priceVal = moneyEl.textContent.match(/\d+\.?\d+/g)[0];
+            const price = parseFloat(priceVal);
+
+            let priceInBaseConvert = 0;
+            // If the base currency price is set in a data- attribute use it
+            if(moneyEl.dataset.base_price){
+                priceInBaseConvert = moneyEl.dataset.base_price;
+            } else { // if not calculate the price in a base rate and set it in a data- attribute
+                priceInBaseConvert = price / baseCurrencyRate.rate;
+                moneyEl.dataset.base_price = priceInBaseConvert;
+            }
+
+            const priceInSelCurrency = priceInBaseConvert * selectedCurrencyRate.rate;
+            
+            // Format the price in the selected locale and display it
+            const currencyDetails = currenciesFlags.find((cf) => cf.code === selectedCurrencyRate.symbol);
+            const selCurLocale = `${currencyDetails.countryCode.toLowerCase()}-${currencyDetails.countryCode}`;
+            const convertedPriceVal = new Intl.NumberFormat(selCurLocale, { style: 'currency', currency: selectedCurrencyRate.symbol }).format(priceInSelCurrency);
+            
+            moneyEl.textContent = convertedPriceVal;
+        }
+    }
+    
+    // Handle the selection of an option
+    document.body.addEventListener( 'click', function ( event ) {
+        const option = event.target.closest(".option");
+        if(option) {
+            const optionMenu = document.querySelector(".select-menu"),
+                  sBtn_text = optionMenu.querySelector(".sBtn-text");
+            
+            const selectedCurrency = option.dataset.symbol;
+            const flagEl = option.querySelector(".currency-flag");
+            sBtn_text.innerText = selectedCurrency;
+            
+            const buttonFlag = sBtn_text.parentElement.querySelector(".currency-flag");
+            if(buttonFlag){
+                sBtn_text.parentElement.removeChild(buttonFlag);
+            }
+
+            // Prepend the html content because it removes the element like this
+            const flagIcon = flagEl.outerHTML;
+            sBtn_text.parentElement.insertAdjacentHTML( "afterbegin", flagIcon );
+            optionMenu.classList.remove("active");
+            
+            updatePrices(selectedCurrency);
+        };
+    });
+
+    const setCurrency = (symbol) => {
+        const curFlag = currenciesFlags.find((cf) => cf.code === symbol);
+        const optionMenu = document.querySelector(".select-menu"),
+            sBtn_text = optionMenu.querySelector(".sBtn-text");
+        if(typeof curFlag === 'undefined'){
+            return;
+        }
+        sBtn_text.innerText = symbol;
+        const flagBg = `url('${curFlag.flag}')`;
+        const flagIcon = `<i class="currency-flag" style="background: ${flagBg}"></i>`;
+        sBtn_text.parentElement.insertAdjacentHTML( "afterbegin", flagIcon );
+    };
+
+    // Set the currency to the shop's default currency
+    setCurrency(ccBaseCurrency);
+})();
+
 // Generate the dropdown
 (() => {
     for (const index in ccRates.currencies) {
@@ -1177,9 +1195,9 @@ const currenciesFlags = [
         }
 
         const flagBg = `url('${curFlag.flag}')`;
-        const optionItem = `<li class="option" data-symbol="${currency.symbol}">
+        const optionItem = `<li class="option" data-symbol="${currency.symbol}" title="${curFlag.name} (${curFlag.code})">
                                 <i class="currency-flag" style="background: ${flagBg}"></i>
-                                <span class="option-text">${curFlag.nameq} (${curFlag.code})</span>
+                                <span class="option-text">${curFlag.name}</span><span class="option-symbol">(${curFlag.code})</span>
                             </li>`;
         document.querySelector(".currencyList.select-menu .options").insertAdjacentHTML( 'beforeend', optionItem );
     }
